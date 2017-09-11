@@ -81,7 +81,7 @@ contract TestSecuritiesDepository {
         Assert.equal(balance, emitAmount, "Security emitting is equal to transaction balance");
     }
 
-// TODO: function testIssuersCanOnlyEmitTheirOwnSecurities() {
+    // TODO: function testIssuersCanOnlyEmitTheirOwnSecurities() {
 
     function testShareholderCanTransferSecurities() {
         // create an issuer and a security
