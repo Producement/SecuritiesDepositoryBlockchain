@@ -85,26 +85,48 @@ contract SecuritiesDepository {
         var security = securities[securityIsin];
         var shareholder = shareholders[shareholderRegistryCode];
 
-        require(msg.sender == security.issuer.identifier);
+        require(isValidEmission(security, shareholder));
 
         credit(security, shareholder, amount);
+    }
+
+    function isValidEmission(Security security, Shareholder shareholder) internal returns (bool) {
+        // regulations and emission rules go here
+        // eg. is valid shareholder PEP, AML, .. checks
+        // eg. is valid security nominal values
+        // ...
+
+        require(msg.sender == security.issuer.identifier);
+
+        return true;
     }
 
     function transfer(
         bytes32 senderRegistryCode, bytes32 receiverRegistryCode,
         bytes32 securityIsin, uint amount) {
         var security = securities[securityIsin];
-
-        uint senderBalance = getBalance(senderRegistryCode, securityIsin);
-        require(senderBalance >= amount);
-
         var sender = shareholders[senderRegistryCode];
-        require(sender.identifier == msg.sender);
+        var receiver = shareholders[receiverRegistryCode];
+
+        require(isValidTransfer(sender, receiver, security, amount));
 
         debit(security, sender, amount);
-
-        var receiver = shareholders[receiverRegistryCode];
         credit(security, receiver, amount);
+    }
+
+    function isValidTransfer(
+        Shareholder sender, Shareholder receiver, Security security, uint amount
+    ) internal returns (bool) {
+        // regulations and transfer rules go here
+        // eg. is valid sender and receiver and amounts PEP, AML, .. checks
+        // eg. is valid security
+        // ...
+
+        uint senderBalance = getBalance(sender.registryCode, security.isin);
+        require(senderBalance >= amount);
+        require(sender.identifier == msg.sender);
+
+        return true;
     }
 
     function credit(Security security, Shareholder shareholder, uint amount) internal {
@@ -121,9 +143,8 @@ contract SecuritiesDepository {
         uint balance = 0;
         for (uint i = 0; i < transactions.length; i ++) {
             var transaction = transactions[i];
-            if (transaction.security.isin == securityIsin &&
-                transaction.shareholder.registryCode == shareholderRegistryCode) {
 
+            if (isTransactionFor(transaction, shareholderRegistryCode, securityIsin)) {
                 if (transaction.transactionType == TransactionType.Credit) {
                     balance += transaction.amount;
                 } else if (transaction.transactionType == TransactionType.Debit) {
@@ -133,6 +154,12 @@ contract SecuritiesDepository {
         }
 
         return balance;
+    }
+
+    function isTransactionFor(
+        Transaction transaction, bytes32 shareholderRegistryCode, bytes32 securityIsin) internal returns (bool) {
+        return transaction.security.isin == securityIsin &&
+            transaction.shareholder.registryCode == shareholderRegistryCode;
     }
 
 }
