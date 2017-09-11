@@ -1,5 +1,5 @@
-# Securities Depository on Blockchain
-This is [Securities Depository](https://en.wikipedia.org/wiki/Central_securities_depository)
+# Securities / ICO Depository on Blockchain
+This is ICO / [Securities Depository](https://en.wikipedia.org/wiki/Central_securities_depository)
 blockchain implementation Proof of Concept projec on [Ethereum](https://www.ethereum.org).
 
 It implements a simplified securities depository domain model with
