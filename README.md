@@ -1,15 +1,17 @@
 # SecuritiesDepositoryBlockchain
-[Securities Depository](https://en.wikipedia.org/wiki/Central_securities_depository)
-on blockchain Proof of Concept. Built on [Ethereum](https://www.ethereum.org).
+This is [Securities Depository](https://en.wikipedia.org/wiki/Central_securities_depository)
+blockchain implementation Proof of Concept projec on [Ethereum](https://www.ethereum.org).
 
-Implements a simplified securities depository domain model with
-Issuer, Security, Shareholder.
+It implements a simplified securities depository domain model with
+Issuer, Security, Shareholder and a Transaction ledger.
 
-Balances are implemented with [double-entry bookkeeping](https://en.wikipedia.org/wiki/Double-entry_bookkeeping_system), by credit/debit Transactions struct ledger.
+Ledger and balances are implemented with [double-entry bookkeeping](https://en.wikipedia.org/wiki/Double-entry_bookkeeping_system) - credit/debit Transactions.
 
-TestSecuritesDepository.sol tests outline
+Tests outline
 * Creation of Issuer, Security, Shareholder
 * Emitting securities by Issuer
 * Transferring securities between Shareholders
 
 Current implementation is not optimized for performance.
+
+Contribution is welcome.
