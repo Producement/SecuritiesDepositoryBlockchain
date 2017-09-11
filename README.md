@@ -1,4 +1,7 @@
 # Securities / ICO Depository on Blockchain
+
+Accompanying [blog post here](https://medium.com/@JordanValdma/ico-regulations-securities-depository-on-a-blockchain-26a65d54495)
+
 This is ICO / [Securities Depository](https://en.wikipedia.org/wiki/Central_securities_depository)
 blockchain implementation Proof of Concept projec on [Ethereum](https://www.ethereum.org).
 
