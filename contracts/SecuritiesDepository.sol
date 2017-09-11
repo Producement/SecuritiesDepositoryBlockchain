@@ -26,10 +26,13 @@ contract SecuritiesDepository {
     }
     mapping(bytes32 => Shareholder) shareholders;
 
+    enum TransactionType { Debit, Credit }
+
     struct Transaction {
         Security security;
         Shareholder shareholder;
         uint amount;
+        TransactionType transactionType;
     }
 
     Transaction[] transactions;
@@ -84,23 +87,52 @@ contract SecuritiesDepository {
 
         require(msg.sender == security.issuer.identifier);
 
-        var transaction = Transaction(security, shareholder, amount);
+        credit(security, shareholder, amount);
+    }
+
+    function transfer(
+        bytes32 senderRegistryCode, bytes32 receiverRegistryCode,
+        bytes32 securityIsin, uint amount) {
+        var security = securities[securityIsin];
+
+        uint senderBalance = getBalance(senderRegistryCode, securityIsin);
+        require(senderBalance >= amount);
+
+        var sender = shareholders[senderRegistryCode];
+        require(sender.identifier == msg.sender);
+
+        debit(security, sender, amount);
+
+        var receiver = shareholders[receiverRegistryCode];
+        credit(security, receiver, amount);
+    }
+
+    function credit(Security security, Shareholder shareholder, uint amount) internal {
+        var transaction = Transaction(security, shareholder, amount, TransactionType.Credit);
         transactions.push(transaction);
     }
 
-    function transactionCount(bytes32 securityIsin) returns (uint) {
-        uint count = 0;
-        for (uint i = 0; i < transactions.length; i ++) {
-            if (transactions[i].security.isin == securityIsin) {
-                count ++;
-            }
-        }
-        return count;
+    function debit(Security security, Shareholder shareholder, uint amount) internal {
+        var transaction = Transaction(security, shareholder, amount, TransactionType.Debit);
+        transactions.push(transaction);
     }
 
-//    function transfer(bytes32 securityIsin, bytes32 shareholderRegistryCode, uint amount) {
-//    }
+    function getBalance(bytes32 shareholderRegistryCode, bytes32 securityIsin) returns (uint) {
+        uint balance = 0;
+        for (uint i = 0; i < transactions.length; i ++) {
+            var transaction = transactions[i];
+            if (transaction.security.isin == securityIsin &&
+                transaction.shareholder.registryCode == shareholderRegistryCode) {
 
+                if (transaction.transactionType == TransactionType.Credit) {
+                    balance += transaction.amount;
+                } else if (transaction.transactionType == TransactionType.Debit) {
+                    balance -= transaction.amount;
+                }
+            }
+        }
 
+        return balance;
+    }
 
 }
