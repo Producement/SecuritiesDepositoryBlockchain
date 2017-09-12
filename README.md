@@ -37,8 +37,8 @@ docker run -d -p 8545:8545 ethereumjs/testrpc:latest --account="0xf3a7e9c563ee03
 Geth new account (OSX)
 ```
 geth --dev --ipcpath ~/Library/Ethereum/geth.ipc console
-personal.newAccount()
-miner.start()
+>personal.newAccount()
+>miner.start()
 ```
 
 Geth existing account and password in password.txt  (OSX)
