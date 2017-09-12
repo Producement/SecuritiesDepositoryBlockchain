@@ -19,6 +19,8 @@ Current implementation is not optimized for performance.
 
 Contribution is welcome.
 
+DISCLAIMER! Curent repo is not optimized for security or performance, but serves as a proof of concept.
+
 ## Running
 
 Uses [Truffle](http://truffleframework.com/)
